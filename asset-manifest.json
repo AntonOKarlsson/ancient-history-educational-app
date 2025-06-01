@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ancient-history-educational-app/static/css/main.9fd119f2.css",
+    "main.js": "/ancient-history-educational-app/static/js/main.a332a658.js",
+    "index.html": "/ancient-history-educational-app/index.html",
+    "main.9fd119f2.css.map": "/ancient-history-educational-app/static/css/main.9fd119f2.css.map",
+    "main.a332a658.js.map": "/ancient-history-educational-app/static/js/main.a332a658.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9fd119f2.css",
+    "static/js/main.a332a658.js"
+  ]
+}
