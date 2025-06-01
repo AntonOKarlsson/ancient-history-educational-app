@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Menning og stjórnmál - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reference.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="reference-home-container">
+    <h1>Menning og stjórnmál</h1>
+    <p>Hér er að finna efni um menningu og stjórnmál frá ýmsum tímabilum og siðmenningum.</p>
+
+    <div class="reference-section">
+        <h2>Menning og samfélag</h2>
+        <div class="reference-grid">
+            <div class="reference-card">
+                <div class="card-header">
+                    <h3>Daglegt líf</h3>
+                </div>
+                <div class="card-body">
+                    <p>Upplýsingar um daglegt líf fólks á ýmsum tímabilum sögunnar.</p>
+                    <p class="category-badge">{{ daily_life_count }} efnisatriði</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'reference:daily_life' %}" class="btn-primary">Skoða</a>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="card-header">
+                    <h3>Þjóðfélagsstéttir</h3>
+                </div>
+                <div class="card-body">
+                    <p>Upplýsingar um þjóðfélagsstéttir og stöðu fólks í samfélaginu.</p>
+                    <p class="category-badge">{{ social_classes_count }} efnisatriði</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'reference:social_classes' %}" class="btn-primary">Skoða</a>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="card-header">
+                    <h3>Viðskipti</h3>
+                </div>
+                <div class="card-body">
+                    <p>Upplýsingar um viðskipti og verslun á ýmsum tímabilum sögunnar.</p>
+                    <p class="category-badge">{{ trade_count }} efnisatriði</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'reference:trade' %}" class="btn-primary">Skoða</a>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="card-header">
+                    <h3>List og byggingalist</h3>
+                </div>
+                <div class="card-body">
+                    <p>Upplýsingar um list og byggingalist á ýmsum tímabilum sögunnar.</p>
+                    <p class="category-badge">{{ art_count }} efnisatriði</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'reference:art' %}" class="btn-primary">Skoða</a>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="card-header">
+                    <h3>Bókmenntir og ritun</h3>
+                </div>
+                <div class="card-body">
+                    <p>Upplýsingar um bókmenntir og ritun á ýmsum tímabilum sögunnar.</p>
+                    <p class="category-badge">{{ literature_count }} efnisatriði</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'reference:literature' %}" class="btn-primary">Skoða</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="reference-section">
+        <h2>Stjórnmál og stjórnarfar</h2>
+        <p>Upplýsingar um stjórnmál og stjórnarfar á ýmsum tímabilum sögunnar.</p>
+        <div class="reference-links">
+            <a href="{% url 'reference:governments_list' %}" class="btn-secondary">
+                Skoða stjórnarfar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

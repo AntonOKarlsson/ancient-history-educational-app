@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SagaAHA - Fornaldarsaga Vefforrit{% endblock %}</title>
+    {% load static %}
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Component Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/buttons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+
+    <!-- Module-specific Stylesheets (loaded conditionally) -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>SagaAHA</h1>
+            <p>Fornaldarsaga Vefforrit fyrir Sögukennara og Nemendur</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="{% url 'core:home' %}">Heimasíða</a></li>
+                <li><a href="{% url 'timeline:timeline' %}">Tímabil</a></li>
+                <li><a href="{% url 'reference:reference_home' %}">Hver-er-hver</a></li>
+                <li><a href="{% url 'reference:culture_home' %}">Menning og stjórnmál</a></li>
+                <li><a href="{% url 'quiz:quiz_home' %}">Próf og æfingar</a></li>
+                <li><a href="{% url 'core:about' %}">Um Verkefnið</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'core:profile' %}">Mitt svæði</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SagaAHA - Fornaldarsaga Vefforrit</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

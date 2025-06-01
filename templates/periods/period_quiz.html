@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ period.name_is }} - Próf - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+<link rel="stylesheet" href="{% static 'css/periods.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="period-header">
+    <h1>{{ period.name_is }} - Próf</h1>
+    <p class="period-dates">{{ period.start_year }} - {{ period.end_year }}</p>
+    <div class="period-navigation">
+        <a href="{% url 'periods:period_home' period_slug=period_slug %}" class="btn-secondary">Til baka</a>
+        <a href="{% url 'periods:period_timeline' period_slug=period_slug %}" class="btn-primary">Tímalína</a>
+        <a href="{% url 'periods:period_people' period_slug=period_slug %}" class="btn-primary">Hver er hver</a>
+        <a href="{% url 'periods:period_culture' period_slug=period_slug %}" class="btn-primary">Menning</a>
+    </div>
+</div>
+
+<div class="quiz-intro">
+    <p>Prófaðu þekkingu þína á {{ period.name_is }} tímabilinu með því að taka eitt af eftirfarandi prófum.</p>
+    <p>Öll prófin eru fjölvalspróf og þú færð niðurstöður strax að loknu prófi.</p>
+</div>
+
+<div class="quiz-grid">
+    {% if quizzes %}
+        {% for quiz in quizzes %}
+            <div class="quiz-card quiz-type-{{ quiz.quiz_type }}">
+                <div class="quiz-header">
+                    <h3>{{ quiz.title_is }}</h3>
+                    <div class="quiz-meta">
+                        <span class="quiz-difficulty difficulty-{{ quiz.difficulty }}">
+                            Erfiðleiki: {{ quiz.difficulty }}
+                        </span>
+                        {% if quiz.time_limit %}
+                            <span class="quiz-time">
+                                Tímamörk: {{ quiz.time_limit }} sek
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="quiz-body">
+                    <p class="quiz-description">{{ quiz.description_is|truncatewords:30 }}</p>
+                </div>
+                <div class="quiz-footer">
+                    <div class="quiz-stats">
+                        <span>{{ quiz.questions.count }} spurningar</span>
+                    </div>
+                    <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn-primary">Taka próf</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-content">
+            <p>Engin próf fundust fyrir valið tímabil.</p>
+            <p>Þú getur búið til sérsniðið próf fyrir þetta tímabil með því að smella á hnappinn hér að neðan.</p>
+            <a href="{% url 'quiz:custom_quiz' %}?period={{ period.id }}" class="btn-primary">Búa til sérsniðið próf</a>
+        </div>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated and quizzes %}
+    <div class="custom-quiz-section">
+        <h2>Búa til sérsniðið próf</h2>
+        <p>Viltu búa til þitt eigið próf fyrir {{ period.name_is }} tímabilið?</p>
+        <a href="{% url 'quiz:custom_quiz' %}?period={{ period.id }}" class="btn-accent">Búa til sérsniðið próf</a>
+    </div>
+{% endif %}
+{% endblock %}

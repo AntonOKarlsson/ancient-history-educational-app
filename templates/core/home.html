@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}SagaAHA - Fornaldarsaga Vefforrit{% endblock %}
+
+{% block content %}
+        <section>
+            <h2>Velkomin í SagaAHA</h2>
+            <p>SagaAHA er gagnvirkt vefforrit sem hjálpar þér að læra um fornaldarsögu frá fyrstu siðmenningum til loka miðalda.</p>
+        </section>
+
+        {% if featured_events %}
+        <section>
+            <h2>Áhugaverðir atburðir</h2>
+            <div class="featured-content">
+                {% for event in featured_events %}
+                <div class="featured-item">
+                    <h3>{{ event.title_is }}</h3>
+                    <p>{{ event.date_start }}{% if event.date_end %} - {{ event.date_end }}{% endif %}</p>
+                    <p>{{ event.description_is|truncatewords:30 }}</p>
+                    <a href="{% url 'timeline:event_detail' event.id %}">Lesa meira</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if featured_people %}
+        <section>
+            <h2>Merkar persónur</h2>
+            <div class="featured-content">
+                {% for person in featured_people %}
+                <div class="featured-item">
+                    <h3>{{ person.name_is }}</h3>
+                    <p>{{ person.birth_date }}{% if person.death_date %} - {{ person.death_date }}{% endif %}</p>
+                    <p>{{ person.biography_is|truncatewords:30 }}</p>
+                    <a href="{% url 'reference:person_detail' person.id %}">Lesa meira</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if user.is_authenticated and user_progress %}
+        <section>
+            <h2>Þinn árangur</h2>
+            <p>Þú hefur lokið {{ user_progress|floatformat:1 }}% af öllum prófum.</p>
+            {% if recent_attempts %}
+            <h3>Nýlegar tilraunir</h3>
+            <ul>
+                {% for attempt in recent_attempts %}
+                <li>
+                    {{ attempt.quiz.title_is }} - {{ attempt.percentage_score|floatformat:1 }}%
+                    <a href="{% url 'quiz:quiz_result' attempt.id %}">Sjá niðurstöður</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </section>
+        {% endif %}
+{% endblock %}

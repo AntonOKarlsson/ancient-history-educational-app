@@ -1,0 +1,213 @@
+/* SagaAHA - Timeline Styles */
+
+/* Timeline Container */
+.timeline-container {
+    position: relative;
+    width: 100%;
+    margin: 40px 0;
+    padding: 20px 0;
+}
+
+/* Timeline Line */
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background-color: var(--supporting-2);
+    transform: translateX(-50%);
+}
+
+/* Timeline Event */
+.timeline-event {
+    position: relative;
+    margin-bottom: 30px;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+/* Left Events (odd) */
+.timeline-event:nth-child(odd) {
+    left: 0;
+    padding-right: 40px;
+    text-align: right;
+}
+
+/* Right Events (even) */
+.timeline-event:nth-child(even) {
+    left: 50%;
+    padding-left: 40px;
+}
+
+/* Event Content */
+.event-content {
+    position: relative;
+    padding: 20px;
+    background-color: var(--text-light);
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Event Content Hover */
+.event-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Left Event Content */
+.timeline-event:nth-child(odd) .event-content {
+    border-right: 4px solid var(--primary-1);
+}
+
+/* Right Event Content */
+.timeline-event:nth-child(even) .event-content {
+    border-left: 4px solid var(--primary-1);
+}
+
+/* Event Dot */
+.event-dot {
+    position: absolute;
+    top: 20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--accent-1);
+    border: 4px solid var(--primary-2);
+    box-shadow: 0 0 0 4px var(--primary-1);
+}
+
+/* Left Event Dot */
+.timeline-event:nth-child(odd) .event-dot {
+    right: -10px;
+}
+
+/* Right Event Dot */
+.timeline-event:nth-child(even) .event-dot {
+    left: -10px;
+}
+
+/* Event Date */
+.event-date {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: var(--accent-2);
+    color: var(--text-light);
+    border-radius: 4px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Event Title */
+.event-title {
+    color: var(--supporting-1);
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Event Description */
+.event-description {
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+/* Event Category */
+.event-category {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* Event Categories */
+.category-political {
+    background-color: var(--primary-1);
+    color: var(--text-light);
+}
+
+.category-military {
+    background-color: var(--special-1);
+    color: var(--text-light);
+}
+
+.category-cultural {
+    background-color: var(--supporting-2);
+    color: var(--text-light);
+}
+
+.category-religious {
+    background-color: var(--accent-1);
+    color: var(--text-dark);
+}
+
+.category-scientific {
+    background-color: var(--accent-2);
+    color: var(--text-light);
+}
+
+.category-economic {
+    background-color: var(--special-2);
+    color: var(--text-light);
+}
+
+.category-other {
+    background-color: var(--supporting-1);
+    color: var(--text-light);
+}
+
+/* Timeline Filters */
+.timeline-filters {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: var(--primary-2);
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--supporting-1);
+}
+
+/* Responsive Timeline */
+@media (max-width: 768px) {
+    .timeline-line {
+        left: 30px;
+    }
+    
+    .timeline-event {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 0;
+        text-align: left;
+    }
+    
+    .timeline-event:nth-child(odd) {
+        left: 0;
+        padding-right: 0;
+        text-align: left;
+    }
+    
+    .timeline-event:nth-child(even) {
+        left: 0;
+    }
+    
+    .timeline-event:nth-child(odd) .event-content {
+        border-right: none;
+        border-left: 4px solid var(--primary-1);
+    }
+    
+    .timeline-event:nth-child(odd) .event-dot {
+        right: auto;
+        left: -10px;
+    }
+}

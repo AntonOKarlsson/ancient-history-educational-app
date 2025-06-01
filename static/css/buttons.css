@@ -1,0 +1,117 @@
+/* SagaAHA - Button Styles */
+
+/* Button Variables */
+:root {
+    /* Import color variables from main stylesheet */
+    /* These are defined in style.css */
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: var(--primary-1);
+    color: var(--text-light);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--special-2);
+    transform: translateY(-2px);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: var(--supporting-2);
+    color: var(--text-light);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-2);
+    transform: translateY(-2px);
+}
+
+/* Accent Button */
+.btn-accent {
+    background-color: var(--accent-1);
+    color: var(--text-dark);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-accent:hover {
+    background-color: var(--supporting-1);
+    color: var(--text-light);
+    transform: translateY(-2px);
+}
+
+/* Outline Button */
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-1);
+    border: 2px solid var(--primary-1);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-1);
+    color: var(--text-light);
+    transform: translateY(-2px);
+}
+
+/* Small Button */
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Large Button */
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+}
+
+/* Full Width Button */
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+/* Button with Icon */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon i, .btn-icon svg {
+    margin-right: 8px;
+}
+
+/* Disabled Button */
+.btn-disabled, .btn-primary:disabled, .btn-secondary:disabled, .btn-accent:disabled, .btn-outline:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-disabled:hover, .btn-primary:disabled:hover, .btn-secondary:disabled:hover, .btn-accent:disabled:hover, .btn-outline:disabled:hover {
+    transform: none;
+}

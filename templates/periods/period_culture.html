@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ period.name_is }} - Menning - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reference.css' %}">
+<link rel="stylesheet" href="{% static 'css/periods.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="period-header">
+    <h1>{{ period.name_is }} - Menning</h1>
+    <p class="period-dates">{{ period.start_year }} - {{ period.end_year }}</p>
+    <div class="period-navigation">
+        <a href="{% url 'periods:period_home' period_slug=period_slug %}" class="btn-secondary">Til baka</a>
+        <a href="{% url 'periods:period_timeline' period_slug=period_slug %}" class="btn-primary">Tímalína</a>
+        <a href="{% url 'periods:period_people' period_slug=period_slug %}" class="btn-primary">Hver er hver</a>
+        <a href="{% url 'periods:period_quiz' period_slug=period_slug %}" class="btn-primary">Próf</a>
+    </div>
+</div>
+
+{% if topics_by_category %}
+    <div class="culture-categories">
+        {% for category_name, topics in topics_by_category.items %}
+            <div class="culture-category">
+                <h2>{{ category_name }}</h2>
+                <div class="reference-grid">
+                    {% for topic in topics %}
+                        <div class="reference-card">
+                            <div class="card-header">
+                                <h3>{{ topic.title_is }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ topic.content_is|truncatewords:30 }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="btn-outline btn-sm" data-toggle="modal" data-target="#topic-{{ topic.id }}">Lesa meira</a>
+                            </div>
+                        </div>
+
+                        <!-- Modal for full content -->
+                        <div class="modal" id="topic-{{ topic.id }}">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2>{{ topic.title_is }}</h2>
+                                    <span class="close">&times;</span>
+                                </div>
+                                <div class="modal-body">
+                                    {% if topic.image %}
+                                        <img src="{{ topic.image.url }}" alt="{{ topic.title_is }}" class="topic-image">
+                                    {% endif %}
+                                    <div class="topic-content">
+                                        {{ topic.content_is|linebreaks }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="no-content">
+        <p>Engin menningarefni fundust fyrir valið tímabil.</p>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modal functionality
+        const modals = document.querySelectorAll('.modal');
+        const modalTriggers = document.querySelectorAll('[data-toggle="modal"]');
+        const modalCloses = document.querySelectorAll('.close');
+
+        // Open modal when trigger is clicked
+        modalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                const modalId = this.getAttribute('data-target');
+                document.querySelector(modalId).style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        });
+
+        // Close modal when close button is clicked
+        modalCloses.forEach(close => {
+            close.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            });
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(e) {
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Enable scrolling
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

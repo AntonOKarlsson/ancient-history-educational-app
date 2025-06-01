@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ period.name_is }} - Hver er hver - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reference.css' %}">
+<link rel="stylesheet" href="{% static 'css/periods.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="period-header">
+    <h1>{{ period.name_is }} - Hver er hver</h1>
+    <p class="period-dates">{{ period.start_year }} - {{ period.end_year }}</p>
+    <div class="period-navigation">
+        <a href="{% url 'periods:period_home' period_slug=period_slug %}" class="btn-secondary">Til baka</a>
+        <a href="{% url 'periods:period_timeline' period_slug=period_slug %}" class="btn-primary">Tímalína</a>
+        <a href="{% url 'periods:period_culture' period_slug=period_slug %}" class="btn-primary">Menning</a>
+        <a href="{% url 'periods:period_quiz' period_slug=period_slug %}" class="btn-primary">Próf</a>
+    </div>
+</div>
+
+<div class="reference-tabs">
+    <div class="reference-tab active" data-target="people">Persónur</div>
+    <div class="reference-tab" data-target="deities">Guðir og gyðjur</div>
+</div>
+
+<div class="reference-content active" id="people-content">
+    <div class="reference-filters">
+        <h2>Sía persónur</h2>
+        <form id="people-filter-form" method="get">
+            <div class="filter-group">
+                <label for="category">Flokkur:</label>
+                <select name="category" id="category" class="form-select">
+                    <option value="">Allir flokkar</option>
+                    {% for category_code, category_name in categories %}
+                        <option value="{{ category_code }}">{{ category_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary">Sía</button>
+            <button type="reset" class="btn-secondary">Hreinsa</button>
+        </form>
+    </div>
+
+    <div class="reference-grid">
+        {% if people %}
+            {% for person in people %}
+                <div class="reference-card">
+                    <div class="card-header">
+                        <h3>{{ person.name_is }}</h3>
+                        <span class="category-badge category-{{ person.category }}">{{ person.get_category_display }}</span>
+                    </div>
+                    <div class="card-body">
+                        {% if person.birth_date or person.death_date %}
+                            <p class="dates">
+                                {% if person.birth_date %}{{ person.birth_date }}{% endif %}
+                                {% if person.death_date %} - {{ person.death_date }}{% endif %}
+                            </p>
+                        {% endif %}
+                        <p>{{ person.biography_is|truncatewords:30 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'reference:person_detail' person.id %}" class="btn-outline btn-sm">Lesa meira</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-content">
+                <p>Engar persónur fundust fyrir valið tímabil.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="reference-content" id="deities-content">
+    <div class="reference-grid">
+        {% if deities %}
+            {% for deity in deities %}
+                <div class="reference-card">
+                    <div class="card-header">
+                        <h3>{{ deity.name_is }}</h3>
+                        <span class="domain">{{ deity.domain_is }}</span>
+                    </div>
+                    <div class="card-body">
+                        {% if deity.symbols_is %}
+                            <p><strong>Tákn:</strong> {{ deity.symbols_is }}</p>
+                        {% endif %}
+                        <p>{{ deity.mythology_is|truncatewords:30 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'reference:deity_detail' deity.id %}" class="btn-outline btn-sm">Lesa meira</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-content">
+                <p>Engir guðir eða gyðjur fundust fyrir valið tímabil.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching
+        const tabs = document.querySelectorAll('.reference-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and content
+                tabs.forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.reference-content').forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(`${this.dataset.target}-content`).classList.add('active');
+            });
+        });
+
+        // Initialize filter form with URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        for (const [key, value] of urlParams) {
+            const element = document.getElementById(key);
+            if (element) {
+                element.value = value;
+            }
+        }
+    });
+</script>
+{% endblock %}

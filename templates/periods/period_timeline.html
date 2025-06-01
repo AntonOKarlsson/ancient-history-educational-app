@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ period.name_is }} - Tímalína - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+<link rel="stylesheet" href="{% static 'css/periods.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="period-header">
+    <h1>{{ period.name_is }} - Tímalína</h1>
+    <p class="period-dates">{{ period.start_year }} - {{ period.end_year }}</p>
+    <div class="period-navigation">
+        <a href="{% url 'periods:period_home' period_slug=period_slug %}" class="btn-secondary">Til baka</a>
+        <a href="{% url 'periods:period_people' period_slug=period_slug %}" class="btn-primary">Hver er hver</a>
+        <a href="{% url 'periods:period_culture' period_slug=period_slug %}" class="btn-primary">Menning</a>
+        <a href="{% url 'periods:period_quiz' period_slug=period_slug %}" class="btn-primary">Próf</a>
+    </div>
+</div>
+
+<div class="timeline-filters">
+    <h2>Sía atburði</h2>
+    <form id="filter-form" method="get">
+        <div class="filter-group">
+            <label for="category">Flokkur:</label>
+            <select name="category" id="category" class="form-select">
+                <option value="">Allir flokkar</option>
+                {% for category, display in event_categories %}
+                    <option value="{{ category }}">{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="start_year">Frá ári:</label>
+            <input type="number" name="start_year" id="start_year" class="form-control" 
+                   value="{{ period.start_year }}" min="{{ period.start_year }}" max="{{ period.end_year }}">
+        </div>
+
+        <div class="filter-group">
+            <label for="end_year">Til árs:</label>
+            <input type="number" name="end_year" id="end_year" class="form-control" 
+                   value="{{ period.end_year }}" min="{{ period.start_year }}" max="{{ period.end_year }}">
+        </div>
+
+        <div class="filter-group">
+            <label for="importance">Mikilvægi:</label>
+            <select name="importance" id="importance" class="form-select">
+                <option value="">Allt mikilvægi</option>
+                <option value="1">1 - Lítið</option>
+                <option value="2">2 - Miðlungs</option>
+                <option value="3">3 - Mikið</option>
+                <option value="4">4 - Mjög mikið</option>
+                <option value="5">5 - Grundvallar</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-primary">Sía</button>
+        <button type="reset" class="btn-secondary">Hreinsa</button>
+    </form>
+</div>
+
+<div class="timeline-container">
+    <div class="timeline-line"></div>
+
+    {% if events %}
+        {% for event in events %}
+            <div class="timeline-event">
+                <div class="event-dot"></div>
+                <div class="event-content">
+                    <span class="event-date">{{ event.date_start }}{% if event.date_end %} - {{ event.date_end }}{% endif %}</span>
+                    <h3 class="event-title">{{ event.title_is }}</h3>
+                    <p class="event-description">{{ event.description_is|truncatewords:30 }}</p>
+                    <span class="event-category category-{{ event.category }}">{{ event.get_category_display }}</span>
+                    <a href="{% url 'timeline:event_detail' event.id %}" class="btn-outline btn-sm">Lesa meira</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-events">
+            <p>Engir atburðir fundust fyrir valið tímabil.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize filter form with URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        for (const [key, value] of urlParams) {
+            const element = document.getElementById(key);
+            if (element) {
+                element.value = value;
+            }
+        }
+    });
+</script>
+{% endblock %}

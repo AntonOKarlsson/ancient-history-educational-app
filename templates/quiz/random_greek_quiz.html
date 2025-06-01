@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Slembiprófun um Grikkland - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz_title }}</h1>
+    <p>Svaraðu þessum 5 slembiröðuðum spurningum um Grikkland hið forna.</p>
+
+    <form method="post" action="{% url 'quiz:random_greek_quiz' %}">
+        {% csrf_token %}
+
+        {% for question in questions %}
+        <!-- Hidden input to track question IDs -->
+        <input type="hidden" name="question_ids" value="{{ question.id }}">
+
+        <div class="quiz-question">
+            <h3 class="question-text">{{ forloop.counter }}. {{ question.question_text_is }}</h3>
+
+            <div class="question-options">
+                {% with options=question.get_options %}
+                    {% for option in options %}
+                    <div class="option-item">
+                        <input type="radio" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" class="option-input" required>
+                        <label for="option_{{ question.id }}_{{ forloop.counter0 }}" class="option-label">{{ option }}</label>
+                    </div>
+                    {% endfor %}
+                {% endwith %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="quiz-actions">
+            <button type="submit" class="btn-primary">Senda svör</button>
+            <a href="{% url 'quiz:quiz_home' %}" class="btn-secondary">Hætta við</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any JavaScript needed for the quiz
+    });
+</script>
+{% endblock %}

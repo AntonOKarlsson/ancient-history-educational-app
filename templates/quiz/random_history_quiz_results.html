@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Niðurstöður prófs - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="quiz-results">
+    <div class="results-header">
+        <h1>{{ quiz_title }} - Niðurstöður</h1>
+        <div class="results-score">{{ score }} / {{ max_score }}</div>
+        <div class="results-percentage">{{ percentage|floatformat:1 }}%</div>
+
+        {% if percentage >= 80 %}
+            <div class="results-message">Frábært! Þú hefur mjög góðan skilning á sögu.</div>
+        {% elif percentage >= 60 %}
+            <div class="results-message">Vel gert! Þú veist töluvert um sögu.</div>
+        {% elif percentage >= 40 %}
+            <div class="results-message">Ekki slæmt. Þú hefur einhverja þekkingu á sögu.</div>
+        {% else %}
+            <div class="results-message">Haltu áfram að læra! Saga getur verið krefjandi.</div>
+        {% endif %}
+    </div>
+
+    <h2>Yfirlit spurninga</h2>
+
+    {% for result in results %}
+    <div class="result-item">
+        <div class="result-question">{{ forloop.counter }}. {{ result.question }}</div>
+
+        <div class="result-answer {% if result.is_correct %}result-correct{% else %}result-incorrect{% endif %}">
+            Þitt svar: {{ result.user_answer }}
+            {% if not result.is_correct %}
+                <div>Rétt svar: {{ result.correct_answer }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="quiz-navigation">
+        <a href="{% url 'quiz:random_history_quiz' %}" class="btn-primary">Reyna aftur</a>
+        <a href="{% url 'quiz:quiz_home' %}" class="btn-secondary">Til baka í próf</a>
+    </div>
+</div>
+{% endblock %}

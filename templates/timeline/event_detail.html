@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title_is }} - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="event-detail-container">
+    <div class="event-header">
+        <h1>{{ event.title_is }}</h1>
+        <div class="event-meta">
+            <span class="event-date">{{ event.date_start }}{% if event.date_end %} - {{ event.date_end }}{% endif %}</span>
+            <span class="event-category category-{{ event.category }}">{{ event.get_category_display }}</span>
+            {% if event.period %}
+                <span class="event-period">{{ event.period.name_is }}</span>
+            {% endif %}
+            {% if event.civilization %}
+                <span class="event-civilization">{{ event.civilization.name_is }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="event-content">
+        {% if event.image %}
+            <div class="event-image">
+                <img src="{{ event.image.url }}" alt="{{ event.title_is }}">
+            </div>
+        {% endif %}
+
+        <div class="event-description">
+            <h2>Lýsing</h2>
+            <div class="description-text">
+                {{ event.description_is|linebreaks }}
+            </div>
+        </div>
+
+        {% if event.region %}
+            <div class="event-region">
+                <h2>Svæði</h2>
+                <p>{{ event.region }}</p>
+            </div>
+        {% endif %}
+
+        {% if related_events %}
+            <div class="related-events">
+                <h2>Tengdir atburðir</h2>
+                <ul class="related-events-list">
+                    {% for relation in related_events %}
+                        <li>
+                            <span class="relation-type">{{ relation.relation_type|title }}:</span>
+                            <a href="{% url 'timeline:event_detail' relation.event.id %}">{{ relation.event.title_is }}</a>
+                            {% if relation.description %}
+                                <p class="relation-description">{{ relation.description }}</p>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="event-navigation">
+        <a href="{% url 'timeline:timeline' %}" class="btn-primary">Til baka í tímalínu</a>
+    </div>
+</div>
+{% endblock %}

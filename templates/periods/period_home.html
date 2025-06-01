@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ period.name_is }} - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/periods.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="period-header">
+    <h1>{{ period.name_is }}</h1>
+    <p class="period-dates">{{ period.start_year }} - {{ period.end_year }}</p>
+    <div class="period-description">
+        {{ period.description_is|linebreaks }}
+    </div>
+</div>
+
+<div class="period-sections">
+    <div class="section-card">
+        <h2>Tímalína</h2>
+        <p>Skoðaðu helstu atburði {{ period.name_is }} tímabilsins.</p>
+        {% if timeline_events %}
+            <div class="sample-content">
+                <ul>
+                    {% for event in timeline_events %}
+                        <li>
+                            <strong>{{ event.date_start }}{% if event.date_end %} - {{ event.date_end }}{% endif %}:</strong>
+                            {{ event.title_is }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <a href="{% url 'periods:period_timeline' period_slug=period_slug %}" class="btn-primary">Skoða tímalínu</a>
+    </div>
+
+    <div class="section-card">
+        <h2>Hver er hver</h2>
+        <p>Kynntu þér mikilvægar persónur og guði {{ period.name_is }} tímabilsins.</p>
+        {% if people or deities %}
+            <div class="sample-content">
+                {% if people %}
+                    <h3>Persónur</h3>
+                    <ul>
+                        {% for person in people %}
+                            <li>{{ person.name_is }} - {{ person.get_category_display }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if deities %}
+                    <h3>Guðir og gyðjur</h3>
+                    <ul>
+                        {% for deity in deities %}
+                            <li>{{ deity.name_is }} - {{ deity.domain_is }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+        <a href="{% url 'periods:period_people' period_slug=period_slug %}" class="btn-primary">Skoða persónur</a>
+    </div>
+
+    <div class="section-card">
+        <h2>Menning</h2>
+        <p>Kynntu þér menningu og samfélag {{ period.name_is }} tímabilsins.</p>
+        {% if cultural_topics %}
+            <div class="sample-content">
+                <ul>
+                    {% for topic in cultural_topics %}
+                        <li>{{ topic.title_is }} - {{ topic.get_category_display }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <a href="{% url 'periods:period_culture' period_slug=period_slug %}" class="btn-primary">Skoða menningu</a>
+    </div>
+
+    <div class="section-card">
+        <h2>Próf</h2>
+        <p>Prófaðu þekkingu þína á {{ period.name_is }} tímabilinu.</p>
+        {% if quizzes %}
+            <div class="sample-content">
+                <ul>
+                    {% for quiz in quizzes %}
+                        <li>{{ quiz.title_is }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <a href="{% url 'periods:period_quiz' period_slug=period_slug %}" class="btn-primary">Taka próf</a>
+    </div>
+</div>
+{% endblock %}

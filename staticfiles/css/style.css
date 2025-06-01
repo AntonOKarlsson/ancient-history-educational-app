@@ -1,0 +1,176 @@
+/* SagaAHA - Main Stylesheet */
+
+/* Color Variables */
+:root {
+    /* Primary Colors */
+    --primary-1: #d4844a; /* Terracotta */
+    --primary-2: #f5f1e8; /* Cream */
+
+    /* Accent Colors */
+    --accent-1: #daa520; /* Goldenrod */
+    --accent-2: #2d5016; /* Forest Green */
+
+    /* Supporting Colors */
+    --supporting-1: #8b4513; /* Saddle Brown */
+    --supporting-2: #87936b; /* Sage Green */
+
+    /* Special Purpose Colors */
+    --special-1: #722f37; /* Burgundy */
+    --special-2: #cc5500; /* Burnt Orange */
+
+    /* Neutral Colors */
+    --text-dark: #333333;
+    --text-light: #ffffff;
+    --background-light: var(--primary-2);
+}
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: var(--text-dark);
+    background-color: var(--background-light);
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--primary-1);
+    color: var(--text-light);
+    padding: 1rem 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+/* Navigation Styles */
+nav {
+    background-color: var(--supporting-1);
+    color: var(--text-light);
+    padding: 0.5rem 0;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: var(--accent-1);
+    text-decoration: none;
+}
+
+/* Main Content Styles */
+main {
+    padding: 20px 0;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: var(--accent-2);
+    border-bottom: 2px solid var(--supporting-2);
+    padding-bottom: 10px;
+}
+
+/* Featured Content Styles */
+.featured-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.featured-item {
+    flex-basis: 30%;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: var(--text-light);
+    border-radius: 5px;
+    border-left: 3px solid var(--primary-1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.featured-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-left-color: var(--special-2);
+}
+
+.featured-item h3 {
+    color: var(--supporting-1);
+    margin-top: 0;
+}
+
+.featured-item a {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--special-2);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.featured-item a:hover {
+    text-decoration: underline;
+    color: var(--primary-1);
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--special-1);
+    color: var(--text-light);
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 20px;
+    border-top: 3px solid var(--accent-1);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+
+    .featured-item {
+        flex-basis: 100%;
+    }
+}

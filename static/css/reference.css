@@ -1,0 +1,244 @@
+/* SagaAHA - Reference Styles */
+
+/* Reference Card */
+.reference-card {
+    background-color: var(--text-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.reference-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Card Header */
+.card-header {
+    padding: 15px;
+    background-color: var(--primary-1);
+    color: var(--text-light);
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Card Body */
+.card-body {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+/* Card Footer */
+.card-footer {
+    padding: 10px 15px;
+    background-color: var(--primary-2);
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Reference Grid */
+.reference-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Reference Detail */
+.reference-detail {
+    background-color: var(--text-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.detail-header {
+    padding: 20px;
+    background-color: var(--supporting-1);
+    color: var(--text-light);
+    position: relative;
+}
+
+.detail-header h2 {
+    margin: 0;
+    color: var(--text-light);
+    border-bottom: none;
+}
+
+.detail-header .dates {
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.detail-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.detail-content {
+    padding: 20px;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+}
+
+.detail-section h3 {
+    color: var(--supporting-1);
+    border-bottom: 2px solid var(--supporting-2);
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Category Badges */
+.category-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+/* Person Categories */
+.category-ruler {
+    background-color: var(--special-2);
+    color: var(--text-light);
+}
+
+.category-military {
+    background-color: var(--special-1);
+    color: var(--text-light);
+}
+
+.category-political {
+    background-color: var(--primary-1);
+    color: var(--text-light);
+}
+
+.category-philosopher {
+    background-color: var(--accent-2);
+    color: var(--text-light);
+}
+
+.category-religious {
+    background-color: var(--accent-1);
+    color: var(--text-dark);
+}
+
+.category-artist {
+    background-color: var(--supporting-2);
+    color: var(--text-light);
+}
+
+.category-scientist {
+    background-color: var(--supporting-1);
+    color: var(--text-light);
+}
+
+/* Reference Filters */
+.reference-filters {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: var(--primary-2);
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--supporting-1);
+}
+
+/* Reference Tabs */
+.reference-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--supporting-2);
+    margin-bottom: 20px;
+}
+
+.reference-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.3s;
+}
+
+.reference-tab:hover {
+    background-color: rgba(212, 132, 74, 0.1);
+}
+
+.reference-tab.active {
+    border-bottom-color: var(--primary-1);
+    font-weight: bold;
+    color: var(--supporting-1);
+}
+
+/* Reference Content */
+.reference-content {
+    display: none;
+}
+
+.reference-content.active {
+    display: block;
+}
+
+/* Related Items */
+.related-items {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--supporting-2);
+}
+
+.related-items h3 {
+    color: var(--supporting-1);
+    margin-bottom: 15px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .reference-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .reference-tabs {
+        flex-direction: column;
+        border-bottom: none;
+    }
+    
+    .reference-tab {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        margin-bottom: 0;
+    }
+    
+    .reference-tab.active {
+        border-bottom-color: transparent;
+        border-left-color: var(--primary-1);
+    }
+    
+    .related-grid {
+        grid-template-columns: 1fr;
+    }
+}

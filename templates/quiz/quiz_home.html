@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Próf - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="quiz-home-container">
+    <h1>Próf og æfingar</h1>
+    <p>Prófaðu þekkingu þína á fornaldarsögu með prófum okkar og æfingum.</p>
+
+    <div class="featured-quiz">
+        <h2>Áberandi próf</h2>
+        <div class="quiz-card quiz-type-period">
+            <div class="quiz-header">
+                <h3>Slembiprófun um sögu</h3>
+                <div class="quiz-meta">
+                    <span class="quiz-difficulty difficulty-3">Miðlungs</span>
+                </div>
+            </div>
+            <div class="quiz-body">
+                <p class="quiz-description">Prófaðu þekkingu þína á sögu með 5 slembiröðuðum spurningum úr ýmsum tímabilum.</p>
+            </div>
+            <div class="quiz-footer">
+                <a href="{% url 'quiz:random_history_quiz' %}" class="btn-primary">Taka próf</a>
+            </div>
+        </div>
+    </div>
+
+    {% if period_quizzes %}
+    <div class="quiz-section">
+        <h2>Próf eftir tímabilum</h2>
+        <div class="quiz-grid">
+            {% for quiz in period_quizzes %}
+            <div class="quiz-card quiz-type-period">
+                <div class="quiz-header">
+                    <h3>{{ quiz.title_is }}</h3>
+                    <div class="quiz-meta">
+                        <span class="quiz-difficulty difficulty-{{ quiz.difficulty }}">
+                            {% if quiz.difficulty == 1 %}Auðvelt{% elif quiz.difficulty == 2 %}Miðlungs-auðvelt{% elif quiz.difficulty == 3 %}Miðlungs{% elif quiz.difficulty == 4 %}Miðlungs-erfitt{% else %}Erfitt{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="quiz-body">
+                    <p class="quiz-description">{{ quiz.description_is|truncatechars:100 }}</p>
+                </div>
+                <div class="quiz-footer">
+                    <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn-primary">Taka próf</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="section-footer">
+            <a href="{% url 'quiz:quiz_by_period' %}" class="btn-secondary">Sjá öll próf eftir tímabilum</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if topic_quizzes %}
+    <div class="quiz-section">
+        <h2>Próf eftir efnisþáttum</h2>
+        <div class="quiz-grid">
+            {% for quiz in topic_quizzes %}
+            <div class="quiz-card quiz-type-topic">
+                <div class="quiz-header">
+                    <h3>{{ quiz.title_is }}</h3>
+                    <div class="quiz-meta">
+                        <span class="quiz-difficulty difficulty-{{ quiz.difficulty }}">
+                            {% if quiz.difficulty == 1 %}Auðvelt{% elif quiz.difficulty == 2 %}Miðlungs-auðvelt{% elif quiz.difficulty == 3 %}Miðlungs{% elif quiz.difficulty == 4 %}Miðlungs-erfitt{% else %}Erfitt{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="quiz-body">
+                    <p class="quiz-description">{{ quiz.description_is|truncatechars:100 }}</p>
+                </div>
+                <div class="quiz-footer">
+                    <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn-primary">Taka próf</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="section-footer">
+            <a href="{% url 'quiz:quiz_by_topic' %}" class="btn-secondary">Sjá öll próf eftir efnisþáttum</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if comprehensive_quizzes %}
+    <div class="quiz-section">
+        <h2>Heildstæð próf</h2>
+        <div class="quiz-grid">
+            {% for quiz in comprehensive_quizzes %}
+            <div class="quiz-card quiz-type-comprehensive">
+                <div class="quiz-header">
+                    <h3>{{ quiz.title_is }}</h3>
+                    <div class="quiz-meta">
+                        <span class="quiz-difficulty difficulty-{{ quiz.difficulty }}">
+                            {% if quiz.difficulty == 1 %}Auðvelt{% elif quiz.difficulty == 2 %}Miðlungs-auðvelt{% elif quiz.difficulty == 3 %}Miðlungs{% elif quiz.difficulty == 4 %}Miðlungs-erfitt{% else %}Erfitt{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="quiz-body">
+                    <p class="quiz-description">{{ quiz.description_is|truncatechars:100 }}</p>
+                </div>
+                <div class="quiz-footer">
+                    <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn-primary">Taka próf</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="section-footer">
+            <a href="{% url 'quiz:comprehensive_quiz' %}" class="btn-secondary">Sjá öll heildstæð próf</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="quiz-section">
+        <h2>Sérsniðið próf</h2>
+        <p>Búðu til þitt eigið sérsniðna próf byggt á þínum óskum.</p>
+        <a href="{% url 'quiz:custom_quiz' %}" class="btn-accent">Búa til sérsniðið próf</a>
+    </div>
+
+    {% if user.is_authenticated and recent_attempts %}
+    <div class="quiz-section">
+        <h2>Nýlegar tilraunir þínar</h2>
+        <ul class="recent-attempts-list">
+            {% for attempt in recent_attempts %}
+            <li>
+                <span class="attempt-quiz">{{ attempt.quiz.title_is }}</span>
+                <span class="attempt-score">{{ attempt.score }} / {{ attempt.max_score }} ({{ attempt.percentage_score|floatformat:1 }}%)</span>
+                <span class="attempt-date">{{ attempt.start_time|date:"d M Y H:i" }}</span>
+                <a href="{% url 'quiz:quiz_result' attempt.id %}" class="btn-outline btn-sm">Sjá niðurstöður</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="section-footer">
+            <a href="{% url 'quiz:progress' %}" class="btn-secondary">Sjá allan framgang</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

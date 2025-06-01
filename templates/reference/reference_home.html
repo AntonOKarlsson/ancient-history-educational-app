@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hver-er-hver - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reference.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="reference-home-container">
+    <h1>Hver-er-hver</h1>
+    <p>Hér er listi yfir allar persónur og guði frá gríska hluta vefsíðunnar.</p>
+
+    <div class="reference-section">
+        <h2>Persónur frá Grikklandi hinu forna</h2>
+        {% if greek_people %}
+            <div class="reference-grid">
+                {% for person in greek_people %}
+                    <div class="reference-card">
+                        <div class="card-header">
+                            <h3>{{ person.name_is }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ person.birth_date }}{% if person.death_date %} - {{ person.death_date }}{% endif %}</p>
+                            <p class="category-badge category-{{ person.category }}">
+                                {{ person.get_category_display }}
+                            </p>
+                            <p>{{ person.biography_is|truncatewords:20 }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'reference:person_detail' person.id %}" class="btn-primary">Lesa meira</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Engar persónur fundust frá Grikklandi hinu forna.</p>
+        {% endif %}
+    </div>
+
+    <div class="reference-section">
+        <h2>Guðir og gyðjur frá Grikklandi hinu forna</h2>
+        {% if greek_deities %}
+            <div class="reference-grid">
+                {% for deity in greek_deities %}
+                    <div class="reference-card">
+                        <div class="card-header">
+                            <h3>{{ deity.name_is }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ deity.domain_is }}</p>
+                            <p>{{ deity.mythology_is|truncatewords:20 }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'reference:deity_detail' deity.id %}" class="btn-primary">Lesa meira</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Engir guðir eða gyðjur fundust frá Grikklandi hinu forna.</p>
+        {% endif %}
+    </div>
+
+    <div class="reference-navigation">
+        <h2>Aðrir flokkar</h2>
+        <div class="reference-links">
+            <a href="{% url 'reference:people_list' %}" class="btn-secondary">
+                Allar persónur ({{ people_count }})
+            </a>
+            <a href="{% url 'reference:deities_list' %}" class="btn-secondary">
+                Allir guðir og gyðjur ({{ deities_count }})
+            </a>
+            <a href="{% url 'reference:governments_list' %}" class="btn-secondary">
+                Stjórnarfar ({{ governments_count }})
+            </a>
+            <a href="{% url 'reference:military_home' %}" class="btn-secondary">
+                Her og stríð ({{ military_units_count }} herdeild, {{ weapons_count }} vopn, {{ battles_count }} bardagar)
+            </a>
+            <a href="{% url 'reference:culture_home' %}" class="btn-secondary">
+                Menning og samfélag ({{ cultural_topics_count }})
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
