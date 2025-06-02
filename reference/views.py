@@ -8,40 +8,51 @@ from core.models import HistoricalPeriod, Civilization
 # Reference Home
 def reference_home(request):
     """Main reference section landing page - Hver-er-hver section"""
-    # Get Greek civilization
+    # Get all civilizations
+    civilizations = Civilization.objects.all().order_by('name_is')
+
+    # Dictionary to store people and deities for each civilization
+    civilization_data = {}
+
+    # Get people and deities for each civilization
+    for civ in civilizations:
+        people = Person.objects.filter(civilization=civ).order_by('name_is')
+        deities = Deity.objects.filter(civilization=civ).order_by('name_is')
+
+        if people.exists() or deities.exists():
+            civilization_data[civ] = {
+                'people': people,
+                'deities': deities
+            }
+
+    # Get all people and deities without a civilization
+    people_without_civ = Person.objects.filter(civilization=None).order_by('name_is')
+    deities_without_civ = Deity.objects.filter(civilization=None).order_by('name_is')
+
+    # For backward compatibility, also get Greek civilization specifically
     try:
         greek_civ = Civilization.objects.get(name_is='Forngrikkir')
-
-        # Get all Greek people
         greek_people = Person.objects.filter(civilization=greek_civ).order_by('name_is')
-
-        # Get all Greek deities
         greek_deities = Deity.objects.filter(civilization=greek_civ).order_by('name_is')
-
-        context = {
-            'greek_people': greek_people,
-            'greek_deities': greek_deities,
-            'people_count': Person.objects.count(),
-            'deities_count': Deity.objects.count(),
-            'governments_count': Government.objects.count(),
-            'military_units_count': MilitaryUnit.objects.count(),
-            'weapons_count': Weapon.objects.count(),
-            'battles_count': Battle.objects.count(),
-            'cultural_topics_count': CulturalTopic.objects.count(),
-        }
     except Civilization.DoesNotExist:
-        # Fallback if Greek civilization doesn't exist
-        context = {
-            'greek_people': [],
-            'greek_deities': [],
-            'people_count': Person.objects.count(),
-            'deities_count': Deity.objects.count(),
-            'governments_count': Government.objects.count(),
-            'military_units_count': MilitaryUnit.objects.count(),
-            'weapons_count': Weapon.objects.count(),
-            'battles_count': Battle.objects.count(),
-            'cultural_topics_count': CulturalTopic.objects.count(),
-        }
+        greek_people = []
+        greek_deities = []
+
+    context = {
+        'civilizations': civilizations,
+        'civilization_data': civilization_data,
+        'people_without_civ': people_without_civ,
+        'deities_without_civ': deities_without_civ,
+        'greek_people': greek_people,
+        'greek_deities': greek_deities,
+        'people_count': Person.objects.count(),
+        'deities_count': Deity.objects.count(),
+        'governments_count': Government.objects.count(),
+        'military_units_count': MilitaryUnit.objects.count(),
+        'weapons_count': Weapon.objects.count(),
+        'battles_count': Battle.objects.count(),
+        'cultural_topics_count': CulturalTopic.objects.count(),
+    }
 
     return render(request, 'reference/reference_home.html', context)
 

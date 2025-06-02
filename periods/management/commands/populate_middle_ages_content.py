@@ -13,51 +13,54 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         self.stdout.write('Populating database with Middle Ages content...')
-        
+
         # Get the Middle Ages period
         try:
             midaldir = HistoricalPeriod.objects.get(name_is='Miðaldir')
         except HistoricalPeriod.DoesNotExist:
             self.stdout.write(self.style.ERROR('Middle Ages period not found. Run populate_periods command first.'))
             return
-        
+
         # Create sub-periods
         armidaldir = self.create_sub_period(midaldir, 'Early Middle Ages', 'Ármiðaldir', 476, 800, 
             'The Early Middle Ages covers the period from the fall of the Western Roman Empire to the rise of Charlemagne.',
             'Ármiðaldir ná frá falli Vestrómverska ríkisins til uppgangs Karls mikla.')
-        
+
         hamidaldir = self.create_sub_period(midaldir, 'High Middle Ages', 'Hámiðaldir', 800, 1350, 
             'The High Middle Ages covers the period from Charlemagne to the beginning of the Late Middle Ages.',
             'Hámiðaldir ná frá Karli mikla til upphafs síðmiðalda.')
-        
+
         sidmidaldir = self.create_sub_period(midaldir, 'Late Middle Ages', 'Síðmiðaldir', 1350, 1492, 
             'The Late Middle Ages covers the period from the Black Death to the beginning of the Age of Discovery.',
             'Síðmiðaldir ná frá svarta dauða til upphafs landafundatímabilsins.')
-        
+
         # Create civilizations
         byzantine_civ = self.create_civilization(midaldir, 'Byzantine Empire', 'Býsanríkið', 330, 1453, 'Eastern Mediterranean',
             'The Byzantine Empire was the continuation of the Eastern Roman Empire during the Late Antiquity and the Middle Ages.',
             'Býsanríkið var framhald Austrómverska ríkisins á síðfornöld og miðöldum.')
-        
+
         islamic_civ = self.create_civilization(midaldir, 'Islamic Caliphate', 'Íslamskt kalífadæmi', 622, 1258, 'Middle East and North Africa',
             'The Islamic Caliphate was the first of several Islamic states established after the death of Muhammad.',
             'Íslamskt kalífadæmi var fyrsta af nokkrum íslömskum ríkjum sem stofnuð voru eftir dauða Múhameðs.')
-        
+
         frankish_civ = self.create_civilization(midaldir, 'Frankish Kingdom', 'Frankaríkið', 481, 843, 'Western Europe',
             'The Frankish Kingdom was the territory inhabited by the Franks, a Germanic people who conquered most of Roman Gaul.',
             'Frankaríkið var landsvæði Franka, germansks þjóðflokks sem lagði undir sig mest allt rómverska Gallíu.')
-        
+
         # Create timeline events
         self.create_timeline_events(midaldir, armidaldir, hamidaldir, sidmidaldir, byzantine_civ, islamic_civ, frankish_civ)
-        
+
         # Create people
         self.create_people(midaldir, byzantine_civ, islamic_civ, frankish_civ)
-        
+
         # Create cultural topics
         self.create_cultural_topics(midaldir)
-        
+
+        # Create quiz
+        self.create_quiz(midaldir)
+
         self.stdout.write(self.style.SUCCESS('Successfully populated Middle Ages content'))
-    
+
     def create_sub_period(self, parent, name, name_is, start_year, end_year, description, description_is):
         """Helper method to create a sub-period"""
         sub_period, created = HistoricalPeriod.objects.get_or_create(
@@ -72,7 +75,7 @@ class Command(BaseCommand):
         if created:
             self.stdout.write(f'Created sub-period: {name_is}')
         return sub_period
-    
+
     def create_civilization(self, period, name, name_is, start_year, end_year, region, description, description_is):
         """Helper method to create a civilization"""
         civilization, created = Civilization.objects.get_or_create(
@@ -88,7 +91,7 @@ class Command(BaseCommand):
         if created:
             self.stdout.write(f'Created civilization: {name_is}')
         return civilization
-    
+
     def create_timeline_events(self, midaldir, armidaldir, hamidaldir, sidmidaldir, byzantine_civ, islamic_civ, frankish_civ):
         """Create timeline events for the Middle Ages"""
         # Early Middle Ages (Ármiðaldir) 476-800
@@ -103,7 +106,7 @@ class Command(BaseCommand):
             category='political',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Germanic Migrations',
             title_is='Þjóðflutningar germanska þjóða',
@@ -116,7 +119,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Merovingian Period Begins',
             title_is='Tímabil Mervíkinga hefst',
@@ -130,7 +133,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Kingdom Formation',
             title_is='Ríkjamyndun',
@@ -143,7 +146,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Byzantine Empire Timeline',
             title_is='Tímalína Býsanríkisins',
@@ -157,7 +160,7 @@ class Command(BaseCommand):
             category='political',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Islamic Expansion',
             title_is='Útbreiðsla íslams',
@@ -171,7 +174,7 @@ class Command(BaseCommand):
             category='political',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Carolingian Rise',
             title_is='Uppgangur Karlungaættar',
@@ -185,7 +188,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         # High Middle Ages (Hámiðaldir) 800-1350
         TimelineEvent.objects.get_or_create(
             title='Charlemagne\'s Empire',
@@ -200,7 +203,7 @@ class Command(BaseCommand):
             category='political',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Empire Division',
             title_is='Skipting ríkisins',
@@ -214,7 +217,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Viking Raids and Empire Decline',
             title_is='Víkingaránir og hnignun ríkisins',
@@ -227,7 +230,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Byzantine Decline Begins',
             title_is='Hnignun Býsanríkisins hefst',
@@ -241,7 +244,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='The Great Schism',
             title_is='Kirkjuklofningurinn mikli',
@@ -253,7 +256,7 @@ class Command(BaseCommand):
             category='religious',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Crusades Era',
             title_is='Tímabil krossferða',
@@ -266,7 +269,7 @@ class Command(BaseCommand):
             category='military',
             importance=5
         )
-        
+
         # Late Middle Ages (Síðmiðaldir) 1350-1492
         TimelineEvent.objects.get_or_create(
             title='The Black Death',
@@ -280,7 +283,7 @@ class Command(BaseCommand):
             category='other',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Political Changes',
             title_is='Stjórnmálabreytingar',
@@ -293,7 +296,7 @@ class Command(BaseCommand):
             category='political',
             importance=4
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Fall of Constantinople',
             title_is='Fall Konstantínópel',
@@ -306,7 +309,7 @@ class Command(BaseCommand):
             category='military',
             importance=5
         )
-        
+
         TimelineEvent.objects.get_or_create(
             title='Age of Discovery Begins',
             title_is='Landafundatímabilið hefst',
@@ -319,7 +322,7 @@ class Command(BaseCommand):
             category='cultural',
             importance=5
         )
-    
+
     def create_people(self, midaldir, byzantine_civ, islamic_civ, frankish_civ):
         """Create people for the Middle Ages"""
         # Emperors & Kings
@@ -336,7 +339,7 @@ class Command(BaseCommand):
             achievements='Constantine was the first Roman emperor to convert to Christianity and founded Constantinople.',
             achievements_is='Konstantín var fyrsti rómverski keisarinn sem tók kristna trú og stofnaði Konstantínópel.'
         )
-        
+
         Person.objects.get_or_create(
             name='Justinian I',
             name_is='Jústiníanus keisari',
@@ -350,7 +353,7 @@ class Command(BaseCommand):
             achievements='Justinian I reconquered much of the former Western Roman Empire and codified Roman law.',
             achievements_is='Jústiníanus I endurheimti stóran hluta fyrrum Vestrómverska ríkisins og samræmdi rómversk lög.'
         )
-        
+
         Person.objects.get_or_create(
             name='Attila the Hun',
             name_is='Atli konungur Húna',
@@ -363,7 +366,7 @@ class Command(BaseCommand):
             achievements='Attila led the Hunnic Empire to its greatest extent before being defeated at the Battle of the Catalaunian Plains.',
             achievements_is='Atli leiddi Húnaríkið til sinnar mestu útbreiðslu áður en hann var sigraður í orrustu á Katalónsvöllum.'
         )
-        
+
         Person.objects.get_or_create(
             name='Clovis I',
             name_is='Kloðvík',
@@ -377,7 +380,7 @@ class Command(BaseCommand):
             achievements='Clovis I united the Frankish tribes and converted to Christianity, setting the stage for the Frankish Empire.',
             achievements_is='Kloðvík sameinaði Franka og tók kristna trú, sem lagði grunninn að Frankaríkinu.'
         )
-        
+
         Person.objects.get_or_create(
             name='Pepin the Short',
             name_is='Pipin litli',
@@ -391,7 +394,7 @@ class Command(BaseCommand):
             achievements='Pepin the Short deposed the last Merovingian king and established the Carolingian dynasty.',
             achievements_is='Pipin litli steypti síðasta Mervíkingakonungnum af stóli og stofnaði Karlungaættina.'
         )
-        
+
         Person.objects.get_or_create(
             name='Charlemagne',
             name_is='Karl mikli',
@@ -405,7 +408,7 @@ class Command(BaseCommand):
             achievements='Charlemagne united much of Western Europe for the first time since the Roman Empire and laid the foundations for modern France and Germany.',
             achievements_is='Karl mikli sameinaði stóran hluta Vestur-Evrópu í fyrsta sinn síðan Rómaveldi féll og lagði grunninn að nútíma Frakklandi og Þýskalandi.'
         )
-        
+
         Person.objects.get_or_create(
             name='Louis the Pious',
             name_is='Lúðvík hinn trúaði',
@@ -419,7 +422,7 @@ class Command(BaseCommand):
             achievements='Louis the Pious continued his father\'s reforms but his division of the empire among his sons led to its fragmentation.',
             achievements_is='Lúðvík hinn trúaði hélt áfram umbótum föður síns en skipting ríkisins milli sona hans leiddi til sundrungar þess.'
         )
-        
+
         # Religious Leaders
         Person.objects.get_or_create(
             name='Muhammad',
@@ -434,7 +437,7 @@ class Command(BaseCommand):
             achievements='Muhammad united Arabia under Islam and established the foundation for the Islamic Caliphate.',
             achievements_is='Múhameð sameinaði Arabíu undir íslam og lagði grunninn að íslömsku kalífadæmi.'
         )
-        
+
         Person.objects.get_or_create(
             name='Abu Bakr',
             name_is='Abu-Bakr',
@@ -448,7 +451,7 @@ class Command(BaseCommand):
             achievements='Abu Bakr consolidated the newly formed Islamic state and began the early Muslim conquests.',
             achievements_is='Abu-Bakr styrkti hið nýstofnaða íslömsku ríki og hóf fyrstu landvinninga múslima.'
         )
-        
+
         Person.objects.get_or_create(
             name='Pope Stephen',
             name_is='Stefán páfi',
@@ -461,7 +464,7 @@ class Command(BaseCommand):
             achievements='Pope Stephen established a strong alliance between the Papacy and the Carolingian dynasty.',
             achievements_is='Stefán páfi kom á sterkum tengslum milli páfastóls og Karlungaættar.'
         )
-        
+
         # Scholars & Cultural Figures
         Person.objects.get_or_create(
             name='Alcuin',
@@ -475,7 +478,7 @@ class Command(BaseCommand):
             achievements='Alcuin was a key figure in the Carolingian Renaissance, advising Charlemagne on educational and cultural matters.',
             achievements_is='Alkvin var lykilpersóna í endurreisn Karlungaættar og ráðlagði Karli mikla í mennta- og menningarmálum.'
         )
-        
+
         Person.objects.get_or_create(
             name='Tacitus',
             name_is='Tacitus',
@@ -488,7 +491,7 @@ class Command(BaseCommand):
             achievements='Tacitus wrote "Germania," which provides valuable information about the Germanic tribes.',
             achievements_is='Tacitus skrifaði "Germanía," sem veitir mikilvægar upplýsingar um germanska þjóðflokka.'
         )
-        
+
         # Germanic Tribal Leaders
         Person.objects.get_or_create(
             name='Childeric I',
@@ -503,7 +506,7 @@ class Command(BaseCommand):
             achievements='Childeric I established the Merovingian dynasty that would rule the Franks for nearly 300 years.',
             achievements_is='Childeric I stofnaði Mervíkingaættina sem ríkti yfir Frökkum í næstum 300 ár.'
         )
-        
+
         Person.objects.get_or_create(
             name='Childeric III',
             name_is='Childerik III',
@@ -517,7 +520,7 @@ class Command(BaseCommand):
             achievements='Childeric III was the last Merovingian king before Pepin the Short deposed him and established the Carolingian dynasty.',
             achievements_is='Childerik III var síðasti Mervíkingakonungurinn áður en Pipin litli steypti honum af stóli og stofnaði Karlungaættina.'
         )
-        
+
         # Byzantine Figures
         Person.objects.get_or_create(
             name='Varangian Guard',
@@ -532,7 +535,7 @@ class Command(BaseCommand):
             achievements='The Varangian Guard served as the personal bodyguards of the Byzantine Emperors.',
             achievements_is='Væringjar þjónuðu sem persónulegir lífverðir býsanskra keisara.'
         )
-    
+
     def create_cultural_topics(self, midaldir):
         """Create cultural topics for the Middle Ages"""
         # Germanic Society
@@ -544,7 +547,7 @@ class Command(BaseCommand):
             content='Germanic society was based on tribal organization with elected kings and limited royal power.',
             content_is='Ættflokkasamfélag: Grundvöllur germanska þjóðfélagsins\nKonungar kosnir af höfðingjum: Ákveðnar ættir höfðu rétt á konungstign\nValdalitlir konungar: Nema í hernaði\nVenjuréttur: Löggjöf byggð á fornum siðum og venjum'
         )
-        
+
         # Religious Divisions
         CulturalTopic.objects.get_or_create(
             title='Religious Divisions',
@@ -554,7 +557,7 @@ class Command(BaseCommand):
             content='Religious divisions in the Middle Ages included Arianism, Catholicism, Monophysitism, and the Iconoclast Controversy.',
             content_is='Aríusarkristni: Jesús var maður en ekki sonur guðs (germönsk ríki)\nKaþólska trú: Í Rómaveldi, á móti Aríusarkristni\nEineðlismenn: Trúðu á guðlegt eðli Krists eingöngu\nÍkona-deilur: Um helgimyndir á 8. öld'
         )
-        
+
         # Islamic Terms
         CulturalTopic.objects.get_or_create(
             title='Islamic Terms',
@@ -564,3 +567,108 @@ class Command(BaseCommand):
             content='Key Islamic terms and concepts that emerged during the Middle Ages.',
             content_is='Íslam: "Hin sanntrúuðu", trúin sjálf\nMúslimar: Fylgismenn íslam\nHijara: Flótti Múhameðs frá Mekka til Medínu 622\nKalífi: Eftirmaður spámannsins\nJihad: Heilagt stríð á trúarlegum forsendum\nBedúínar: Hirðingjar Arabíu'
         )
+
+    def create_quiz(self, midaldir):
+        """Create a quiz for the Middle Ages"""
+        # Create a quiz about the Middle Ages
+        quiz, created = Quiz.objects.get_or_create(
+            title='Middle Ages Quiz',
+            title_is='Próf um miðaldir',
+            description='Test your knowledge about the Middle Ages.',
+            description_is='Prófaðu þekkingu þína á miðöldum.',
+            quiz_type='period',
+            period=midaldir,
+            difficulty=3,
+            is_published=True
+        )
+
+        if created:
+            # Create questions for the quiz
+            questions = [
+                {
+                    'question': 'When did the Middle Ages begin?',
+                    'question_is': 'Hvenær hófust miðaldir?',
+                    'type': 'multiple_choice',
+                    'options': '["476 CE", "500 CE", "600 CE", "700 CE"]',
+                    'correct': '0',
+                    'explanation': 'The Middle Ages began with the fall of the Western Roman Empire in 476 CE.',
+                    'explanation_is': 'Miðaldir hófust með falli Vestrómverska ríkisins árið 476 e.Kr.'
+                },
+                {
+                    'question': 'Who was the first king of the Franks to unite all Frankish tribes?',
+                    'question_is': 'Hver var fyrsti konungur Franka sem sameinaði alla Franka?',
+                    'type': 'multiple_choice',
+                    'options': '["Charlemagne", "Clovis I", "Pepin the Short", "Childeric I"]',
+                    'correct': '1',
+                    'explanation': 'Clovis I was the first king of the Franks to unite all of the Frankish tribes under one ruler.',
+                    'explanation_is': 'Kloðvík var fyrsti konungur Franka sem sameinaði alla Franka undir einum stjórnanda.'
+                },
+                {
+                    'question': 'Who was crowned Emperor by the Pope in 800 CE?',
+                    'question_is': 'Hver var krýndur keisari af páfa árið 800 e.Kr.?',
+                    'type': 'multiple_choice',
+                    'options': '["Charlemagne", "Louis the Pious", "Pepin the Short", "Constantine the Great"]',
+                    'correct': '0',
+                    'explanation': 'Charlemagne was crowned Emperor by Pope Leo III on Christmas Day, 800 CE.',
+                    'explanation_is': 'Karl mikli var krýndur keisari af Leó III páfa á jóladag árið 800 e.Kr.'
+                },
+                {
+                    'question': 'What was the Great Schism of 1054?',
+                    'question_is': 'Hvað var kirkjuklofningurinn mikli árið 1054?',
+                    'type': 'multiple_choice',
+                    'options': '["Division of the Frankish Empire", "Split between Eastern Orthodox and Roman Catholic churches", "Division of the Islamic Caliphate", "Split between Sunni and Shia Muslims"]',
+                    'correct': '1',
+                    'explanation': 'The Great Schism of 1054 was the split between the Eastern Orthodox and Roman Catholic churches.',
+                    'explanation_is': 'Kirkjuklofningurinn mikli árið 1054 var klofningur milli grísku rétttrúnaðarkirkjunnar og rómversk-kaþólsku kirkjunnar.'
+                },
+                {
+                    'question': 'What event in 1453 CE marked the end of the Byzantine Empire?',
+                    'question_is': 'Hvaða atburður árið 1453 e.Kr. markaði endalok Býsanríkisins?',
+                    'type': 'multiple_choice',
+                    'options': '["Fall of Constantinople", "Battle of Adrianople", "Fourth Crusade", "Battle of Manzikert"]',
+                    'correct': '0',
+                    'explanation': 'The Fall of Constantinople to the Ottoman Turks in 1453 CE marked the end of the Byzantine Empire.',
+                    'explanation_is': 'Fall Konstantínópel til Tyrkja árið 1453 e.Kr. markaði endalok Býsanríkisins.'
+                },
+                {
+                    'question': 'What was the Black Death?',
+                    'question_is': 'Hvað var svarti dauði?',
+                    'type': 'multiple_choice',
+                    'options': '["A medieval torture method", "A bubonic plague pandemic", "A period of famine", "A religious movement"]',
+                    'correct': '1',
+                    'explanation': 'The Black Death was a bubonic plague pandemic that killed 30-60% of Europe\'s population between 1347-1351 CE.',
+                    'explanation_is': 'Svarti dauði var plágan mikla sem drap 30-60% af íbúum Evrópu á árunum 1347-1351 e.Kr.'
+                },
+                {
+                    'question': 'Who founded Islam in the 7th century?',
+                    'question_is': 'Hver stofnaði íslam á 7. öld?',
+                    'type': 'multiple_choice',
+                    'options': '["Abu Bakr", "Muhammad", "Ali", "Umar"]',
+                    'correct': '1',
+                    'explanation': 'Muhammad founded Islam in the 7th century and is considered the last prophet by Muslims.',
+                    'explanation_is': 'Múhameð stofnaði íslam á 7. öld og er talinn síðasti spámaðurinn af múslimum.'
+                },
+                {
+                    'question': 'What event in 1492 CE is often considered to mark the end of the Middle Ages?',
+                    'question_is': 'Hvaða atburður árið 1492 e.Kr. er oft talinn marka lok miðalda?',
+                    'type': 'multiple_choice',
+                    'options': '["Columbus\'s voyage to America", "The fall of Constantinople", "The Black Death", "The Hundred Years\' War"]',
+                    'correct': '0',
+                    'explanation': 'Columbus\'s voyage to America in 1492 CE is often considered to mark the end of the Middle Ages and the beginning of the Age of Discovery.',
+                    'explanation_is': 'Sigling Kristófers Kólumbusar til Ameríku árið 1492 e.Kr. er oft talin marka lok miðalda og upphaf landafundatímabilsins.'
+                }
+            ]
+
+            for q in questions:
+                Question.objects.create(
+                    quiz=quiz,
+                    question_text=q['question'],
+                    question_text_is=q['question_is'],
+                    question_type=q['type'],
+                    options=q['options'],
+                    correct_answer=q['correct'],
+                    explanation=q['explanation'],
+                    explanation_is=q['explanation_is'],
+                    difficulty=3,
+                    points=1
+                )

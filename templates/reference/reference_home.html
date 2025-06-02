@@ -10,13 +10,14 @@
 {% block content %}
 <div class="reference-home-container">
     <h1>Hver-er-hver</h1>
-    <p>Hér er listi yfir allar persónur og guði frá gríska hluta vefsíðunnar.</p>
+    <p>Hér er listi yfir allar persónur og guði frá öllum tímabilum.</p>
 
+    {% for civ, data in civilization_data.items %}
     <div class="reference-section">
-        <h2>Persónur frá Grikklandi hinu forna</h2>
-        {% if greek_people %}
+        <h2>Persónur frá {{ civ.name_is }}</h2>
+        {% if data.people %}
             <div class="reference-grid">
-                {% for person in greek_people %}
+                {% for person in data.people %}
                     <div class="reference-card">
                         <div class="card-header">
                             <h3>{{ person.name_is }}</h3>
@@ -35,15 +36,15 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>Engar persónur fundust frá Grikklandi hinu forna.</p>
+            <p>Engar persónur fundust frá {{ civ.name_is }}.</p>
         {% endif %}
     </div>
 
     <div class="reference-section">
-        <h2>Guðir og gyðjur frá Grikklandi hinu forna</h2>
-        {% if greek_deities %}
+        <h2>Guðir og gyðjur frá {{ civ.name_is }}</h2>
+        {% if data.deities %}
             <div class="reference-grid">
-                {% for deity in greek_deities %}
+                {% for deity in data.deities %}
                     <div class="reference-card">
                         <div class="card-header">
                             <h3>{{ deity.name_is }}</h3>
@@ -59,9 +60,57 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>Engir guðir eða gyðjur fundust frá Grikklandi hinu forna.</p>
+            <p>Engir guðir eða gyðjur fundust frá {{ civ.name_is }}.</p>
         {% endif %}
     </div>
+    {% endfor %}
+
+    {% if people_without_civ %}
+    <div class="reference-section">
+        <h2>Aðrar persónur</h2>
+        <div class="reference-grid">
+            {% for person in people_without_civ %}
+                <div class="reference-card">
+                    <div class="card-header">
+                        <h3>{{ person.name_is }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ person.birth_date }}{% if person.death_date %} - {{ person.death_date }}{% endif %}</p>
+                        <p class="category-badge category-{{ person.category }}">
+                            {{ person.get_category_display }}
+                        </p>
+                        <p>{{ person.biography_is|truncatewords:20 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'reference:person_detail' person.id %}" class="btn-primary">Lesa meira</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if deities_without_civ %}
+    <div class="reference-section">
+        <h2>Aðrir guðir og gyðjur</h2>
+        <div class="reference-grid">
+            {% for deity in deities_without_civ %}
+                <div class="reference-card">
+                    <div class="card-header">
+                        <h3>{{ deity.name_is }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>{{ deity.domain_is }}</p>
+                        <p>{{ deity.mythology_is|truncatewords:20 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'reference:deity_detail' deity.id %}" class="btn-primary">Lesa meira</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
     <div class="reference-navigation">
         <h2>Aðrir flokkar</h2>
