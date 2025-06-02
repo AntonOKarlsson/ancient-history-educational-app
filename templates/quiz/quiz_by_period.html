@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Próf eftir tímabilum - SagaAHA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="quiz-by-period-container">
+    <h1>Próf eftir tímabilum</h1>
+    <p>Veldu próf úr ákveðnu sögulegu tímabili til að prófa þekkingu þína.</p>
+
+    <div class="period-navigation">
+        <h2>Stökkva á tímabil</h2>
+        <div class="period-links">
+            {% for period, quizzes in period_quizzes.items %}
+                {% if quizzes %}
+                    <a href="#period-{{ period.id }}" class="period-link">{{ period.name_is }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% for period, quizzes in period_quizzes.items %}
+        {% if quizzes %}
+            <div id="period-{{ period.id }}" class="quiz-section">
+                <h2>{{ period.name_is }} ({{ period.start_year }} - {{ period.end_year }})</h2>
+                <div class="quiz-grid">
+                    {% for quiz in quizzes %}
+                        <div class="quiz-card quiz-type-period">
+                            <div class="quiz-header">
+                                <h3>{{ quiz.title_is }}</h3>
+                                <div class="quiz-meta">
+                                    <span class="quiz-difficulty difficulty-{{ quiz.difficulty }}">
+                                        {% if quiz.difficulty == 1 %}Auðvelt{% elif quiz.difficulty == 2 %}Miðlungs-auðvelt{% elif quiz.difficulty == 3 %}Miðlungs{% elif quiz.difficulty == 4 %}Miðlungs-erfitt{% else %}Erfitt{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="quiz-body">
+                                <p class="quiz-description">{{ quiz.description_is|truncatechars:100 }}</p>
+                            </div>
+                            <div class="quiz-footer">
+                                <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn-primary">Taka próf</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    {% if not period_quizzes %}
+        <div class="no-quizzes">
+            <p>Engin próf fundust fyrir nein tímabil.</p>
+        </div>
+    {% endif %}
+
+    <div class="back-link">
+        <a href="{% url 'quiz:quiz_home' %}" class="btn-secondary">Til baka á prófsíðu</a>
+    </div>
+</div>
+{% endblock %}

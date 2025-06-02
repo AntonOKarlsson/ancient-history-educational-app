@@ -12,7 +12,23 @@ def timeline(request):
     civilizations = Civilization.objects.all().order_by('name_is')
 
     # Get initial events (limited to improve performance)
-    events = TimelineEvent.objects.all().order_by('date_start')[:100]
+    # Get a balanced set of events from each civilization
+    events = []
+
+    # Get all civilizations
+    all_civilizations = Civilization.objects.all()
+
+    # Get events from each civilization (up to 20 per civilization)
+    for civ in all_civilizations:
+        civ_events = TimelineEvent.objects.filter(civilization=civ).order_by('date_start')[:20]
+        events.extend(civ_events)
+
+    # Add events without a civilization
+    no_civ_events = TimelineEvent.objects.filter(civilization=None).order_by('date_start')[:20]
+    events.extend(no_civ_events)
+
+    # Sort all events chronologically
+    events = sorted(events, key=lambda x: x.date_start)
 
     context = {
         'periods': periods,
