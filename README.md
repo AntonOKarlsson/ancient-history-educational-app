@@ -12,7 +12,7 @@ An interactive educational web application for learning ancient history from pre
 ## Historical Periods Covered
 - Pre-Greek Civilizations (Fyrir-grísk siðmenning)
 - Ancient Greece (Grikkland)
-- Roman Empire (Rómaveldi) - *Coming Soon*
+- Roman Empire (Rómaveldi)
 - Middle Ages (Miðaldir)
 
 ## Technologies Used
