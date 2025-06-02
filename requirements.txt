@@ -1,4 +1,4 @@
 ﻿Django
 gunicorn
 whitenoise
-Pillow==10.2.0
+Pillow==11.0.0
